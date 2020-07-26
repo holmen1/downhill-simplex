@@ -6,6 +6,22 @@ open DownhillSimplex
 
 [<TestFixture>]
 type TestClass () =
+    
+    [<Test>]
+    member this.TestInitializeVertices() =
+        let initVertex = [1.0; 100.0]
+        let expected = [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
+        let actual = NM.initializeVertices initVertex
+        Assert.That(actual, Is.EqualTo(expected))
+        //CollectionAssert.AreEquivalent(expected, actual)
+
+    [<Test>]
+    member this.TestEvaluateVertices() =
+        let initVertices = [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
+        let values = [1.0 + 100.0; 1.1 * 1.0 + 100.0; 1.0 + 1.1 * 100.0]
+        let expected = List.zip values initVertices
+        let actual = NM.evaluateVertices (fun [x:float; y:float] -> x + y) initVertices
+        Assert.That(actual, Is.EqualTo(expected))
 
     // Sort
     [<Test>]
@@ -29,11 +45,6 @@ type TestClass () =
         let expected = (1.0, 1.0)
         let actual = NM.fit objFcn init
         Assert.That(actual, Is.EqualTo(expected))
-    
-    [<Test>]
-    member this.TestInitializeVertices() =
-        let initV = [1.0; 100.0]
-        let expected = [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
-        let actual = NM.initializeVertices initV
-        Assert.That(actual, Is.EqualTo(expected))
-        //CollectionAssert.AreEquivalent(expected, actual)
+
+
+

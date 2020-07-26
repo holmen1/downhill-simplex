@@ -14,6 +14,12 @@ let initializeVertices (initVertex:float list) =
     let n = initVertex.Length
     initVertex :: List.init n (fun index -> bumpVertex index (fun f -> 1.1 * f) initVertex)
 
+let evaluateVertices f vertices =
+    vertices
+    |> List.zip (List.map f vertices)
+
+
+
 
 // Returns list [(f(x1), x1); (f(x2), x2); ...; (f(xn+1), xn+1)]
 // s. t. f(x1) <= f(x2) <= ... <= f(xn+1)
@@ -48,6 +54,10 @@ printfn "Passed the banana-test : %b" success
 
 let bump x =
     1.1 * x
+
+
+let addera = (fun [x:float; y:float] -> x + y)
+let addera = (fun [x; y] -> x + y)
 
 
 
