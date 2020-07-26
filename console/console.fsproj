@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="DownhillSimplex.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
