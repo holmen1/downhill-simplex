@@ -16,7 +16,7 @@ type TestClass () =
         let t3 = 3.23, (0.0, 9.99)
         let valueList = [t2; t3; t0; t1]
         let expected = [t0; t1; t2; t3]
-        let actual = DS.orderVertices valueList
+        let actual = NM.orderVertices valueList
         Assert.That(actual, Is.EqualTo(expected))
 
     // Main
@@ -27,5 +27,13 @@ type TestClass () =
         let objFcn = bananaFcn (1.0, 100.0)
         let init = (-0.5, 3.0)
         let expected = (1.0, 1.0)
-        let actual = DS.fit objFcn init
+        let actual = NM.fit objFcn init
         Assert.That(actual, Is.EqualTo(expected))
+    
+    [<Test>]
+    member this.TestInitializeVertices() =
+        let initV = [1.0; 100.0]
+        let expected = [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
+        let actual = NM.initializeVertices initV
+        Assert.That(actual, Is.EqualTo(expected))
+        //CollectionAssert.AreEquivalent(expected, actual)
