@@ -14,30 +14,6 @@ let initializeVertices (initVertex:float list) =
     let n = initVertex.Length
     initVertex :: List.init n (fun index -> bumpVertex index (fun f -> 1.1 * f) initVertex)
 
-
-// let centroid (vertices:float list list) =
-//     //let l = vertices.Head.Length
-//     let array = Array.create vertices.Head.Length 0.0
-//     let array0 = List.toArray vertices.Head
-//     array0
-
-let centroid3 (vertices:float list list) =
-    List.map2 (+) vertices.Head vertices.Head
-
-
-let rec centroid2 v=
-    match v with
-        | head :: tail -> head + centroid2 tail
-        | [] -> 0
-
-
-// let rec centroid (vertices:float list list)=
-//     match vertices with
-//         | head :: tail  when tail.IsEmpty -> List.map2 (+) head [ for i in 1 .. head.Length -> 0.0 ]
-//         | head :: tail -> List.map2 (+) head (centroid tail)
-//         | [] -> [ for i in 1 .. vertices.Head.Length -> 0.0 ]
-//     |> List.map (fun x ->  x + 1.0)
-
 let centroid (vertices:float list list) =
     let rec sumCoordinates (v:float list list) =
         match v with
@@ -51,26 +27,29 @@ let centroid (vertices:float list list) =
     // |> List.rev
     // |> sumCoordinates
     // |> List.map (fun x ->  x / float (vertices.Length - 1))
-        
-    
-
-    
-  
-
-
 
 let evaluateVertices f vertices =
     vertices
+
     |> List.zip (List.map f vertices)
-
-
-
 
 // Returns list [(f(x1), x1); (f(x2), x2); ...; (f(xn+1), xn+1)]
 // s. t. f(x1) <= f(x2) <= ... <= f(xn+1)
 let orderVertices valueVertexPairs:(float*'a) list =
     valueVertexPairs
     |> List.sortBy fst
+
+let maxIndex0 vertexVals =
+    vertexVals
+    |> Seq.mapi (fun i v -> i, v)
+    |> Seq.maxBy snd
+
+let argMax f vertices =
+    vertices
+    |> List.mapi (fun i v -> (i, f v))
+    |> List.maxBy snd
+// argMax (fun [x; y] -> 4.0 - x ** 2.0 + y ** 2.0) [[0.0;0.0];[4.0;4.0];[1.0;2.0];[88.0;88.0]];;
+// val it : int * float = (2, 7.0)
 
 
 let fit objective initGuess =

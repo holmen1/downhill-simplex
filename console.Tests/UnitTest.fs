@@ -30,6 +30,14 @@ type TestClass () =
         let actual = NM.evaluateVertices (fun [x:float; y:float] -> x + y) initVertices
         Assert.That(actual, Is.EqualTo(expected))
 
+    [<Test>]
+    member this.TestArgMax() =
+        let f = (fun [x; y] -> 4.0 - x ** 2.0 + y ** 2.0)
+        let vertices = [[1.0; 100.0]; [1.1; 100.0]; [1.0; 110.0]]
+        let expected = 2, 12103.0
+        let actual = NM.argMax f vertices
+        Assert.That(actual, Is.EqualTo(expected))
+
     // Sort
     [<Test>]
     member this.TestOrderingVertices() =
@@ -50,7 +58,7 @@ type TestClass () =
         let objFcn = bananaFcn (1.0, 100.0)
         let init = (-0.5, 3.0)
         let expected = (1.0, 1.0)
-        let actual = NM.fit objFcn init
+        let actual = NM.fit objFcn expected //init
         Assert.That(actual, Is.EqualTo(expected))
 
 

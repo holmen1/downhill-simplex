@@ -25,6 +25,11 @@ module NM =
         vertices
         |> List.zip (List.map f vertices)
 
+    let argMax f vertices =
+        vertices
+        |> List.mapi (fun i v -> (i, f v))
+        |> List.maxBy snd
+
     // Returns list with tuples [(f(x1), x1); (f(x2), x2); ...; (f(xn+1), xn+1)]
     // s. t. f(x1) <= f(x2) <= ... <= f(xn+1)
     let orderVertices valueVertexPairs:(float*'a) list =
