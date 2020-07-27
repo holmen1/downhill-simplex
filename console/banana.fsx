@@ -14,6 +14,51 @@ let initializeVertices (initVertex:float list) =
     let n = initVertex.Length
     initVertex :: List.init n (fun index -> bumpVertex index (fun f -> 1.1 * f) initVertex)
 
+
+// let centroid (vertices:float list list) =
+//     //let l = vertices.Head.Length
+//     let array = Array.create vertices.Head.Length 0.0
+//     let array0 = List.toArray vertices.Head
+//     array0
+
+let centroid3 (vertices:float list list) =
+    List.map2 (+) vertices.Head vertices.Head
+
+
+let rec centroid2 v=
+    match v with
+        | head :: tail -> head + centroid2 tail
+        | [] -> 0
+
+
+// let rec centroid (vertices:float list list)=
+//     match vertices with
+//         | head :: tail  when tail.IsEmpty -> List.map2 (+) head [ for i in 1 .. head.Length -> 0.0 ]
+//         | head :: tail -> List.map2 (+) head (centroid tail)
+//         | [] -> [ for i in 1 .. vertices.Head.Length -> 0.0 ]
+//     |> List.map (fun x ->  x + 1.0)
+
+let centroid (vertices:float list list) =
+    let rec sumCoordinates (v:float list list) =
+        match v with
+            | head :: tail  when tail.IsEmpty -> List.map2 (+) head [ for i in 1 .. head.Length -> 0.0 ]
+            | head :: tail -> List.map2 (+) head (sumCoordinates tail)
+            | [] -> failwith "Hoppsan!"
+    sumCoordinates vertices
+    |> List.map (fun x ->  x / float vertices.Length)
+
+    // (List.rev vertices).Tail
+    // |> List.rev
+    // |> sumCoordinates
+    // |> List.map (fun x ->  x / float (vertices.Length - 1))
+        
+    
+
+    
+  
+
+
+
 let evaluateVertices f vertices =
     vertices
     |> List.zip (List.map f vertices)
@@ -57,7 +102,7 @@ let bump x =
 
 
 let addera = (fun [x:float; y:float] -> x + y)
-let addera = (fun [x; y] -> x + y)
+//let addera = (fun [x; y] -> x + y)
 
 
 

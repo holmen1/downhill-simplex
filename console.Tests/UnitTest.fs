@@ -16,6 +16,13 @@ type TestClass () =
         //CollectionAssert.AreEquivalent(expected, actual)
 
     [<Test>]
+    member this.TestCentroid() =
+        let initVertices = [[1.0; 100.0]; [-40.0; 100.0]; [3.0; -20.0]]
+        let expected = [-12.0; 60.0]
+        let actual = NM.centroid initVertices
+        Assert.That(actual, Is.EqualTo(expected))
+
+    [<Test>]
     member this.TestEvaluateVertices() =
         let initVertices = [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
         let values = [1.0 + 100.0; 1.1 * 1.0 + 100.0; 1.0 + 1.1 * 100.0]
