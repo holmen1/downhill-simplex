@@ -50,6 +50,18 @@ type TestClass () =
         let actual = NM.orderVertices valueList
         Assert.That(actual, Is.EqualTo(expected))
 
+    // Objective function
+    [<Test>]
+    member this.TestBanana() =
+        let bananaFcn ((a,b): float*float) ((x,y): float*float) =
+            (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
+        let objFcn = bananaFcn (1.0, 100.0)
+        let minl = [1.0; 1.0]
+        let mint = NM.toTuple2 minl
+        let expected = 0.0
+        let actual = NM.objFcn mint
+        Assert.That(actual, Is.EqualTo(expected))
+
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =

@@ -36,6 +36,15 @@ module NM =
         valueVertexPairs
         |> List.sortBy fst
 
+    let toTuple2 l =
+        match l with
+        | [x; y] -> x, y
+        | _ -> failwith "List not 2-d"
+
+    let objFcn =
+        let bananaFcn ((a,b): float*float) ((x,y): float*float) =
+            (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
+        bananaFcn (1.0, 100.0)
 
     let fit objective initGuess =
         // to be implemented ...
