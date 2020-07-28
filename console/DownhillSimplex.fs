@@ -25,10 +25,17 @@ module NM =
         vertices
         |> List.zip (List.map f vertices)
 
+    // argMax/argMin
+    // returns (i, f(vertex_i))
     let argMax f vertices =
         vertices
         |> List.mapi (fun i v -> (i, f v))
         |> List.maxBy snd
+
+    let argMin f vertices =
+        vertices
+        |> List.mapi (fun i v -> (i, f v))
+        |> List.minBy snd
 
     // Returns list with tuples [(f(x1), x1); (f(x2), x2); ...; (f(xn+1), xn+1)]
     // s. t. f(x1) <= f(x2) <= ... <= f(xn+1)
@@ -47,5 +54,10 @@ module NM =
         bananaFcn (1.0, 100.0)
 
     let fit objective initGuess =
-        // to be implemented ...
-        initGuess
+        let vertices =
+            initializeVertices initGuess
+            |> List.map toTuple2
+        let lowVertex = argMin objective vertices
+        let lowI = fst lowVertex
+        let indexed = List.mapi (fun i v -> i,v) vertices
+        List.filter (fun (i,_) -> i = lowI) indexed

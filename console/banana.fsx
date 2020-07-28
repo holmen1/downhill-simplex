@@ -52,6 +52,7 @@ let maxIndex0 vertexVals =
     |> Seq.mapi (fun i v -> i, v)
     |> Seq.maxBy snd
 
+// ar
 let argMax f vertices =
     vertices
     |> List.mapi (fun i v -> (i, f v))

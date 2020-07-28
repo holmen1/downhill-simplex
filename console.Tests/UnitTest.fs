@@ -38,6 +38,16 @@ type TestClass () =
         let actual = NM.argMax f vertices
         Assert.That(actual, Is.EqualTo(expected))
 
+    [<Test>]
+    member this.TestArgMin() =
+        let f = NM.objFcn
+        let vertices =
+            [[1.0; 100.0]; [1.1; 100.0]; [1.0; 1.0]; [1.0; 110.0]]
+            |> List.map NM.toTuple2
+        let expected = 2, 0.0
+        let actual = NM.argMin f vertices
+        Assert.That(actual, Is.EqualTo(expected))
+
     // Sort
     [<Test>]
     member this.TestOrderingVertices() =
@@ -65,12 +75,10 @@ type TestClass () =
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =
-        let bananaFcn ((a,b): float*float) ((x,y): float*float) =
-            (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-        let objFcn = bananaFcn (1.0, 100.0)
-        let init = (-0.5, 3.0)
-        let expected = (1.0, 1.0)
-        let actual = NM.fit objFcn expected //init
+        let objFcn = NM.objFcn
+        let initVertex = [1.0; 1.0]     
+        let expected = [0, (1.0, 1.0)]
+        let actual = NM.fit objFcn initVertex
         Assert.That(actual, Is.EqualTo(expected))
 
 
