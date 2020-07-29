@@ -1,5 +1,3 @@
-namespace DownhillSimplex
-
 // Nelder-Mead
 module NM =
 
@@ -52,7 +50,7 @@ module NM =
             makesimplex init
             |> List.map tuple
         let low = argMin objective tuples
-        tuples.Item(fst low), snd low
+        tuples.Item(fst low)
 
     // to test
     let objFcn =
