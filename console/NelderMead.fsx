@@ -57,3 +57,55 @@ module NM =
         let bananaFcn ((a,b): float*float) ((x,y): float*float) =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
         bananaFcn (1.0, 100.0)
+
+
+    let rec remove i l =
+        match i, l with
+        | 0, x::xs -> xs
+        | i, x::xs -> x::remove (i - 1) xs
+        | i, [] -> failwith "index out of range"
+
+
+
+
+    // In Point2D, two immutable values are defined.
+    // It also has a member which computes a distance between itself and another Point2D.
+    // Point2D has an explicit constructor.
+    // You can create zero-initialized instances of Point2D, or you can
+    // pass in arguments to initialize the values.
+    type Point2D =
+        struct
+            val X: float
+            val Y: float
+            new(x: float, y: float) = { X = x; Y = y }
+
+            member this.GetDistanceFrom(p: Point2D) =
+                let dX = (p.X - this.X) ** 2.0
+                let dY = (p.Y - this.Y) ** 2.0
+                dX + dY
+                |> sqrt
+        end
+
+    type Vertex =
+        struct
+            val X: float
+            val Y: float
+            new(x: float, y: float) = { X = x; Y = y }
+
+            member this.Dimension() =
+                2.0
+        end
+
+    type Simplex =
+        struct
+            val V0: Vertex
+            val V1: Vertex
+            val V2: Vertex
+            new(V: Vertex) = 
+                { V0 = V
+                  V1 = V
+                  V2 = V }
+
+            member this.Dimension() =
+                2.0
+        end

@@ -7,6 +7,12 @@ module NM =
     let bump index f v = 
         List.mapi (fun i x -> if i = index then f x else x) v
 
+    let rec remove index v =
+        match index, v with
+        | 0, _::xs -> xs
+        | index, x::xs -> x::remove (index - 1) xs
+        | _, [] -> failwith "index out of range"
+
     // initial simplex
     let makesimplex (v:float list) =
         let n = v.Length

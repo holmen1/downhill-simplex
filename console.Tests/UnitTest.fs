@@ -40,6 +40,13 @@ type TestClass () =
         let actual = NM.argMin f vertices
         Assert.That(actual, Is.EqualTo(expected))
 
+    [<Test>]
+    member this.TestRemove() =
+        let vertex = [1.0; 100.0; 1.1; 11.0; 0.0]
+        let expected = [1.0; 1.1; 11.0; 0.0]
+        let actual = NM.remove 1 vertex
+        Assert.That(actual, Is.EqualTo(expected))
+
     // Objective function
     [<Test>]
     member this.TestBanana() =
