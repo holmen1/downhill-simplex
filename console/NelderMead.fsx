@@ -1,9 +1,17 @@
 // Nelder-Mead
 module NM =
+    type Vertex = Vertex of float list
 
     // bumps v[index] -> f(v[index])
-    let bump index f v = 
-        List.mapi (fun i x -> if i = index then f x else x) v
+    let bump index f v =
+        (fun (Vertex u) -> u) v
+        |> List.mapi (fun i x -> if i = index then f x else x)
+        |> Vertex
+
+    let v = [1.0; 2.0; 3.0] |> Vertex
+    let expected = [1.0; 2.2; 3.0] |> Vertex
+    let v' = bump 1 (fun x -> 1.1 * x) v
+    let (Vertex vlist) = v'
 
     // initial simplex
     let makesimplex (v:float list) =
@@ -65,47 +73,21 @@ module NM =
         | i, x::xs -> x::remove (i - 1) xs
         | i, [] -> failwith "index out of range"
 
+// - - -
 
+    type Vertex = Vertex of float list
 
+    // using the constructor as a function
+    [1.0; 2.0; 3.0] |> Vertex
+   
+    // inline deconstruction
+    let v' = [1.0; 2.0; 3.0] |> Vertex
+    let (Vertex v'') = v'
 
-    // In Point2D, two immutable values are defined.
-    // It also has a member which computes a distance between itself and another Point2D.
-    // Point2D has an explicit constructor.
-    // You can create zero-initialized instances of Point2D, or you can
-    // pass in arguments to initialize the values.
-    type Point2D =
-        struct
-            val X: float
-            val Y: float
-            new(x: float, y: float) = { X = x; Y = y }
+    let simplex = 
+        [[1.0;2.0]; [3.0;4.0]; [5.0;6.0]]
+        |> List.map Vertex
 
-            member this.GetDistanceFrom(p: Point2D) =
-                let dX = (p.X - this.X) ** 2.0
-                let dY = (p.Y - this.Y) ** 2.0
-                dX + dY
-                |> sqrt
-        end
-
-    type Vertex =
-        struct
-            val X: float
-            val Y: float
-            new(x: float, y: float) = { X = x; Y = y }
-
-            member this.Dimension() =
-                2.0
-        end
-
-    type Simplex =
-        struct
-            val V0: Vertex
-            val V1: Vertex
-            val V2: Vertex
-            new(V: Vertex) = 
-                { V0 = V
-                  V1 = V
-                  V2 = V }
-
-            member this.Dimension() =
-                2.0
-        end
+    let simplex' = 
+        simplex
+        |> List.map (fun (Vertex v) -> v)

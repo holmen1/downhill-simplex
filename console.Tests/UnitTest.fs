@@ -6,11 +6,19 @@ open DownhillSimplex
 
 [<TestFixture>]
 type TestClass () =
+
+    [<Test>]
+    member this.TestBump() =
+        let vertex = [1.0; 2.0; 3.0] |> NM.Vertex
+        let expected = [1.0; 2.2; 3.0] |> NM.Vertex
+        let actual = NM.bump 1 (fun x -> 1.1 * x) vertex
+        Assert.That(actual, Is.EqualTo(expected))
+        //CollectionAssert.AreEquivalent(expected, actual)
     
     [<Test>]
     member this.TestMakeSimplex() =
-        let initVertex = [1.0; 100.0]
-        let expected = [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
+        let initVertex = [1.0; 100.0] |> NM.Vertex
+        let expected = List.map NM.Vertex [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
         let actual = NM.makesimplex initVertex
         Assert.That(actual, Is.EqualTo(expected))
         //CollectionAssert.AreEquivalent(expected, actual)
@@ -34,7 +42,7 @@ type TestClass () =
     member this.TestArgMin() =
         let f = NM.objFcn
         let vertices =
-            [[1.0; 100.0]; [1.1; 100.0]; [1.0; 1.0]; [1.0; 110.0]]
+            List.map NM.Vertex [[1.0; 100.0]; [1.1; 100.0]; [1.0; 1.0]; [1.0; 110.0]]
             |> List.map NM.tuple
         let expected = 2, 0.0
         let actual = NM.argMin f vertices
@@ -53,17 +61,17 @@ type TestClass () =
         let bananaFcn ((a,b): float*float) ((x,y): float*float) =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
         let objFcn = bananaFcn (1.0, 100.0)
-        let minl = [1.0; 1.0]
-        let mint = NM.tuple minl
+        let min = [1.0; 1.0] |> NM.Vertex
+        let min' = NM.tuple min
         let expected = 0.0
-        let actual = NM.objFcn mint
+        let actual = NM.objFcn min'
         Assert.That(actual, Is.EqualTo(expected))
 
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =
         let objFcn = NM.objFcn
-        let initVertex = [1.0; 1.0]     
+        let initVertex = [1.0; 1.0] |> NM.Vertex  
         let expected = ((1.0, 1.0), 0.0)
         let actual = NM.fit objFcn initVertex
         Assert.That(actual, Is.EqualTo(expected))
