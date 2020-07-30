@@ -50,12 +50,14 @@ module NM =
         |> List.mapi (fun i v -> (i, f v))
         |> List.minBy snd
 
-    // cast 2-d vertex to 2-d tuple
-    let tuple v =
-        let (Vertex l) = v
-        match l with
-        | [x; y] -> x, y
-        | _ -> failwith "Vertex not 2-d"
+    // cast vertex to tuple
+    // Presumes 2-d, need to generalize!
+    let tuple (Vertex v) =
+        let v' = List.toArray v |> Array.map box
+        let types = v' |> Array.map (fun o -> o.GetType())
+        let tupleType = Microsoft.FSharp.Reflection.FSharpType.MakeTupleType types
+        Reflection.FSharpValue.MakeTuple (v', tupleType)
+        |> unbox<float*float>
 
     // main
     // fit bananaFcn [3.0; 5.0]
