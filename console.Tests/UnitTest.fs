@@ -24,10 +24,27 @@ type TestClass () =
         //CollectionAssert.AreEquivalent(expected, actual)
 
     [<Test>]
+    member this.TestSumSimplex() =
+        let simplex =
+            List.map NM.Vertex [[1.0; 100.0]; [-40.0; 100.0]]
+        let expected = [-39.0; 200.0] |> NM.Vertex
+        let actual = NM.sumSimplex simplex
+        Assert.That(actual, Is.EqualTo(expected))
+
+    [<Test>]
     member this.TestCentroid() =
-        let initVertices = [[1.0; 100.0]; [-40.0; 100.0]; [3.0; -20.0]]
-        let expected = [-12.0; 60.0]
-        let actual = NM.centroid initVertices
+        let vertices =
+            List.map NM.Vertex [[1.0; 100.0]; [-40.0; 100.0]; [3.0; -20.0]]
+        let expected = [-12.0; 60.0] |> NM.Vertex
+        let actual = NM.centroid vertices
+        Assert.That(actual, Is.EqualTo(expected))
+
+    [<Test>]
+    member this.TestReflection() =
+        let xh = NM.Vertex [0.0; 3.0]
+        let xc = NM.Vertex [0.0; 1.0]
+        let expected = [0.0; - 1.0] |> NM.Vertex
+        let actual = NM.reflection xc xh
         Assert.That(actual, Is.EqualTo(expected))
 
     [<Test>]

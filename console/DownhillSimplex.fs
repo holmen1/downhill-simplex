@@ -24,19 +24,33 @@ module NM =
         let n = l.Length
         vertex :: List.init n (fun index -> bump index (fun f -> 1.1 * f) vertex)
 
+    // binary operator, o = +, -, /
+    let op o (Vertex v1) (Vertex v2) =
+        List.map2 o v1 v2
+        |> Vertex
+
+    // zero Vertex of with v.Length
+    let zero (Vertex v) =
+        [ for i in 1 .. v.Length -> 0.0 ]
+        |> Vertex
+
     // sum elementwise
     // sumVertices [[1.0; 1.0]; [2.0; 3.0]];;
     // val it : float list = [3.0; 4.0]
     let rec sumSimplex simplex =
         match simplex with
-            | head :: tail  when tail.IsEmpty -> List.map2 (+) head [ for i in 1 .. head.Length -> 0.0 ]
-            | head :: tail -> List.map2 (+) head (sumSimplex tail)
+            | head :: tail  when tail.IsEmpty -> op (+) head (zero head)
+            | head :: tail -> op (+) head (sumSimplex tail)
             | [] -> failwith "warning FS0025"
 
     // arithmetic mean vertex of simplex
-    let centroid (simplex:float list list) =
-        sumSimplex simplex
-        |> List.map (fun x ->  x / float simplex.Length)
+    let centroid simplex =
+        let (Vertex l) = sumSimplex simplex
+        List.map (fun x ->  x / float simplex.Length) l
+        |> Vertex
+
+    let reflection xc xh =
+        op (+) xc (op (-) xc xh)
 
     // argMax/argMin
     // returns (i, f(vertex_i))
@@ -54,10 +68,11 @@ module NM =
     // fit bananaFcn [3.0; 5.0]
     // val it : float list = [1.0; 1.0]
     let fit objective init =
-        let simplex =
-            makeSimplex init
-        let low = argMin objective simplex
-        simplex.Item(fst low), snd low
+        let simplex = makeSimplex init
+        let l, flow = argMin objective simplex
+        let h, fhigh = argMax objective simplex
+        let xc = centroid simplex
+        simplex.Item(l), flow
 
     // to test
     let objFcn vertex =
