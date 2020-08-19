@@ -19,7 +19,7 @@ type TestClass () =
     member this.TestMakeSimplex() =
         let initVertex = [1.0; 100.0] |> NM.Vertex
         let expected = List.map NM.Vertex [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
-        let actual = NM.makesimplex initVertex
+        let actual = NM.makeSimplex initVertex
         Assert.That(actual, Is.EqualTo(expected))
         //CollectionAssert.AreEquivalent(expected, actual)
 
@@ -43,7 +43,6 @@ type TestClass () =
         let f = NM.objFcn
         let vertices =
             List.map NM.Vertex [[1.0; 100.0]; [1.1; 100.0]; [1.0; 1.0]; [1.0; 110.0]]
-            |> List.map NM.tuple
         let expected = 2, 0.0
         let actual = NM.argMin f vertices
         Assert.That(actual, Is.EqualTo(expected))
@@ -58,13 +57,9 @@ type TestClass () =
     // Objective function
     [<Test>]
     member this.TestBanana() =
-        let bananaFcn ((a,b): float*float) ((x,y): float*float) =
-            (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-        let objFcn = bananaFcn (1.0, 100.0)
         let min = [1.0; 1.0] |> NM.Vertex
-        let min' = NM.tuple min
         let expected = 0.0
-        let actual = NM.objFcn min'
+        let actual = NM.objFcn min
         Assert.That(actual, Is.EqualTo(expected))
 
     // Main
@@ -72,7 +67,7 @@ type TestClass () =
     member this.TestDownhillSimplex() =
         let objFcn = NM.objFcn
         let initVertex = [1.0; 1.0] |> NM.Vertex  
-        let expected = ((1.0, 1.0), 0.0)
+        let expected = (initVertex, 0.0)
         let actual = NM.fit objFcn initVertex
         Assert.That(actual, Is.EqualTo(expected))
 

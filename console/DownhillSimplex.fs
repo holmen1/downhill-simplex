@@ -19,10 +19,10 @@ module NM =
         | _, [] -> failwith "index out of range"
 
     // initial simplex
-    let makesimplex v =
-        let (Vertex l) = v
+    let makeSimplex vertex =
+        let (Vertex l) = vertex
         let n = l.Length
-        v :: List.init n (fun index -> bump index (fun f -> 1.1 * f) v)
+        vertex :: List.init n (fun index -> bump index (fun f -> 1.1 * f) vertex)
 
     // sum elementwise
     // sumVertices [[1.0; 1.0]; [2.0; 3.0]];;
@@ -50,28 +50,19 @@ module NM =
         |> List.mapi (fun i v -> (i, f v))
         |> List.minBy snd
 
-    // cast vertex to tuple
-    // Presumes 2-d, need to generalize!
-    let tuple (Vertex v) =
-        let v' = List.toArray v |> Array.map box
-        let types = v' |> Array.map (fun o -> o.GetType())
-        let tupleType = Microsoft.FSharp.Reflection.FSharpType.MakeTupleType types
-        Reflection.FSharpValue.MakeTuple (v', tupleType)
-        |> unbox<float*float>
-
     // main
     // fit bananaFcn [3.0; 5.0]
     // val it : float list = [1.0; 1.0]
     let fit objective init =
         let simplex =
-            makesimplex init
-            |> List.map tuple
+            makeSimplex init
         let low = argMin objective simplex
         simplex.Item(fst low), snd low
 
     // to test
-    let objFcn =
+    let objFcn vertex =
+        let (Vertex l) = vertex
         let bananaFcn ((a,b): float*float) ((x,y): float*float) =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-        bananaFcn (1.0, 100.0)
+        bananaFcn (1.0, 100.0) (l.Item(0), l.Item(1))
 
