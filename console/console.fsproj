@@ -6,8 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="DownhillSimplex.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Triple.fs"/>
+    <Compile Include="DownhillSimplex.fs"/>
+    <Compile Include="Program.fs"/>
   </ItemGroup>
 
 </Project>

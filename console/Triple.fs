@@ -1,3 +1,4 @@
+//[<AutoOpen>]
 module Triple
 
 type triple(x: float, y: float, z: float) =
@@ -106,8 +107,9 @@ module Triple =
   let normalize (t: triple) = t / (norm t)
   let init (fn: int->float) = triple(fn 0, fn 1, fn 2)
 
-// usage
+(* // usage
 let tr1 = triple(5,2,3)
 let tr2 = triple(5,2,3)
 let v1 = (-tr1 + tr2 - tr1) .* tr2 ./ tr1 .** 2. * tr1 + tr1.[0] + tr2.X
 let v2 = tr1.norm + Triple.norm2 tr2
+// ... etc *)
