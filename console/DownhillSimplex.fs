@@ -1,29 +1,27 @@
 namespace DownhillSimplex
 
+open Vertex2D
 
 // Nelder-Mead
 module NM =
 
-    type Vertex = Vertex of float list
-
     // bumps v[index] -> f(v[index])
-    let bump index f v = 
-        (fun (Vertex u) -> u) v
-        |> List.mapi (fun i x -> if i = index then f x else x)
-        |> Vertex
-
-    let rec remove i v =
-        match i, v with
+    let bump (i: int) (f: float->float) (v: vertex) = 
+    //let bump i f v =
+        vertex.mapi i f v
+        
+ 
+    let rec remove (i: int) (simplex: vertex list) =
+        match i, simplex with
         | 0, _::xs -> xs
         | i, x::xs -> x::remove (i - 1) xs
         | _, [] -> failwith "index out of range"
 
     // initial simplex
-    let makeSimplex vertex =
-        let (Vertex l) = vertex
-        let n = l.Length
-        vertex :: List.init n (fun index -> bump index (fun f -> 1.1 * f) vertex)
-
+    let makeSimplex (v: vertex) =
+        let n = vertex.Length v
+        v :: List.init n (fun i -> bump i (fun x -> 1.1 * x) v)
+(*
     // binary operator, o = +, -, /
     let op o (Vertex v1) (Vertex v2) =
         List.map2 o v1 v2
@@ -100,5 +98,5 @@ module NM =
     // val it : float list = [1.0; 1.0]
     let fit init =
         let simplex = makeSimplex init
-        downhillLoop objFcn simplex
+        downhillLoop objFcn simplex *)
 

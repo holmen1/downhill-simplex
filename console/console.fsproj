@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Include="Triple.fs"/>
+    <Compile Include="Vertex2D.fs"/>
     <Compile Include="DownhillSimplex.fs"/>
     <Compile Include="Program.fs"/>
   </ItemGroup>
