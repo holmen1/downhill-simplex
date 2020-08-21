@@ -48,6 +48,13 @@ type TestClass () =
         Assert.That(actual, Is.EqualTo(expected))
 
     [<Test>]
+    member this.TestRemove() =
+        let xs = [0.0; 1.0; 8.0; 3.0]
+        let expected = [0.0; 1.0; 3.0]
+        let actual = NM.remove 2 xs
+        Assert.That(actual, Is.EqualTo(expected))
+
+    [<Test>]
     member this.TestArgMax() =
         let f = (fun (x, y) -> 4.0 - x ** 2.0 + y ** 2.0)
         let tuples  = [(1.0, 100.0); (1.1, 100.0); (1.0, 110.0)]
@@ -64,13 +71,6 @@ type TestClass () =
         let actual = NM.argMin f vertices
         Assert.That(actual, Is.EqualTo(expected))
 
-    [<Test>]
-    member this.TestRemove() =
-        let vertex = [1.0; 100.0; 1.1; 11.0; 0.0]
-        let expected = [1.0; 1.1; 11.0; 0.0]
-        let actual = NM.remove 1 vertex
-        Assert.That(actual, Is.EqualTo(expected))
-
     // Objective function
     [<Test>]
     member this.TestBanana() =
@@ -85,7 +85,7 @@ type TestClass () =
         let objFcn = NM.objFcn
         let initVertex = [1.0; 1.0] |> NM.Vertex  
         let expected = (initVertex, 0.0)
-        let actual = NM.fit objFcn initVertex
+        let actual = NM.fit initVertex
         Assert.That(actual, Is.EqualTo(expected))
 
 

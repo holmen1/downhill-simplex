@@ -12,10 +12,10 @@ module NM =
         |> List.mapi (fun i x -> if i = index then f x else x)
         |> Vertex
 
-    let rec remove index v =
-        match index, v with
+    let rec remove i v =
+        match i, v with
         | 0, _::xs -> xs
-        | index, x::xs -> x::remove (index - 1) xs
+        | i, x::xs -> x::remove (i - 1) xs
         | _, [] -> failwith "index out of range"
 
     // initial simplex
@@ -27,6 +27,10 @@ module NM =
     // binary operator, o = +, -, /
     let op o (Vertex v1) (Vertex v2) =
         List.map2 o v1 v2
+        |> Vertex
+
+    let scalmul a (Vertex v1) =
+        List.map (fun x -> a * x) v1
         |> Vertex
 
     // zero Vertex of with v.Length
@@ -52,6 +56,9 @@ module NM =
     let reflection xc xh =
         op (+) xc (op (-) xc xh)
 
+    let expansion xc x' =
+        op (+) x' (scalmul 2.0 (op (-) x' xc))
+
     // argMax/argMin
     // returns (i, f(vertex_i))
     let argMax f simplex =
@@ -64,15 +71,22 @@ module NM =
         |> List.mapi (fun i v -> (i, f v))
         |> List.minBy snd
 
-    // main
-    // fit bananaFcn [3.0; 5.0]
-    // val it : float list = [1.0; 1.0]
-    let fit objective init =
-        let simplex = makeSimplex init
+    let downhillLoop objective simplex =
         let l, flow = argMin objective simplex
-        let h, fhigh = argMax objective simplex
-        let xc = centroid simplex
-        simplex.Item(l), flow
+        let h, _ = argMax objective simplex
+        let xh = simplex.Item(h)
+        let simplex' = remove h simplex
+        let xc = centroid simplex'
+        let xr = reflection xc xh
+        let fr = objective xr
+        let x =
+            if fr < flow
+                then expansion xc xr
+            elif fr > flow then xr 
+            else xc
+        x::simplex'
+
+
 
     // to test
     let objFcn vertex =
@@ -80,4 +94,11 @@ module NM =
         let bananaFcn ((a,b): float*float) ((x,y): float*float) =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
         bananaFcn (1.0, 100.0) (l.Item(0), l.Item(1))
+
+    // main
+    // fit bananaFcn [3.0; 5.0]
+    // val it : float list = [1.0; 1.0]
+    let fit init =
+        let simplex = makeSimplex init
+        downhillLoop objFcn simplex
 
