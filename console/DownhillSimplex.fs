@@ -6,20 +6,20 @@ open Vertex2D
 module NM =
 
     // bumps v[index] -> f(v[index])
-    let bump (i: int) (f: float->float) (v: vertex) = 
+    let bump (i: int) (f: float->float) (v: Vertex) = 
     //let bump i f v =
-        vertex.mapi i f v
+        Vertex.mapi i f v
         
  
-    let rec remove (i: int) (simplex: vertex list) =
+    let rec remove (i: int) (simplex: Vertex list) =
         match i, simplex with
         | 0, _::xs -> xs
         | i, x::xs -> x::remove (i - 1) xs
         | _, [] -> failwith "index out of range"
 
     // initial simplex
-    let makeSimplex (v: vertex) =
-        let n = vertex.Length v
+    let makeSimplex (v: Vertex) =
+        let n = Vertex.Length v
         v :: List.init n (fun i -> bump i (fun x -> 1.1 * x) v)
 (*
     // binary operator, o = +, -, /
