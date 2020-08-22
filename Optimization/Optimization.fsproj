@@ -1,17 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Program.fs"/>
+    <Compile Include="DownhillSimplex.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../Numerics/Numerics.fsproj" />
-    <ProjectReference Include="../Optimization/Optimization.fsproj" />
   </ItemGroup>
 
 </Project>

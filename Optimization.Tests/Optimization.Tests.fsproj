@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../console/console.fsproj" />
+    <ProjectReference Include="../Optimization/Optimization.fsproj" />
   </ItemGroup>
 
 </Project>
