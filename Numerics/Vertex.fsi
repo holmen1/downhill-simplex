@@ -27,7 +27,7 @@ namespace FSharp.Numerics
       static member ( - ) : a:float * b:Vertex -> Vertex
       static member ( - ) : a:Vertex * b:float -> Vertex
       static member ( - ) : a:Vertex * b:Vertex -> Vertex
-      static member toVertex : x:float list -> Vertex
+      static member toVertex : x:float * y:float -> Vertex
     end
   module Vertex = begin
     val toList : v:Vertex -> float list

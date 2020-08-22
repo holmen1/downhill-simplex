@@ -19,42 +19,28 @@ module NM =
     let makeSimplex (v: Vertex) =
         let n = Vertex.Length v
         v :: List.init n (fun i -> bump i (fun x -> 1.1 * x) v)
-(*
-    // binary operator, o = +, -, /
-    let op o (Vertex v1) (Vertex v2) =
-        List.map2 o v1 v2
-        |> Vertex
-
-    let scalmul a (Vertex v1) =
-        List.map (fun x -> a * x) v1
-        |> Vertex
-
-    // zero Vertex of with v.Length
-    let zero (Vertex v) =
-        [ for i in 1 .. v.Length -> 0.0 ]
-        |> Vertex
 
     // sum elementwise
     // sumVertices [[1.0; 1.0]; [2.0; 3.0]];;
     // val it : float list = [3.0; 4.0]
-    let rec sumSimplex simplex =
+    let rec sumSimplex (simplex: Vertex list) =
         match simplex with
-            | head :: tail  when tail.IsEmpty -> op (+) head (zero head)
-            | head :: tail -> op (+) head (sumSimplex tail)
+            | head :: tail  when tail.IsEmpty -> head
+            | head :: tail -> head + (sumSimplex tail)
             | [] -> failwith "warning FS0025"
 
     // arithmetic mean vertex of simplex
-    let centroid simplex =
-        let (Vertex l) = sumSimplex simplex
-        List.map (fun x ->  x / float simplex.Length) l
-        |> Vertex
+    let centroid (simplex: Vertex list) =
+        (sumSimplex simplex) / (float simplex.Length)
 
-    let reflection xc xh =
-        op (+) xc (op (-) xc xh)
+    
+    let reflection (xc: Vertex) (xh: Vertex) =
+        xc + (xc - xh)
 
-    let expansion xc x' =
-        op (+) x' (scalmul 2.0 (op (-) x' xc))
+    let expansion (xc: Vertex) (x': Vertex) =
+        x' + 2.0 * (x' - xc)
 
+    (*
     // argMax/argMin
     // returns (i, f(vertex_i))
     let argMax f simplex =

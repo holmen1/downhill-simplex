@@ -19,35 +19,35 @@ type TestClass () =
     [<Test>]
     member this.TestMakeSimplex() =
         let initVertex = Vertex(1.0, 100.0)
-        let expected = List.map Vertex.toVertex [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
+        let expected = List.map Vertex.toVertex [(1.0, 100.0); (1.1 * 1.0, 100.0); (1.0, 1.1 * 100.0)]
         let actual = NM.makeSimplex initVertex
         Assert.That(actual, Is.EqualTo(expected))
         //CollectionAssert.AreEquivalent(expected, actual)
-(*
+
     [<Test>]
     member this.TestSumSimplex() =
         let simplex =
-            List.map NM.Vertex [[1.0; 100.0]; [-40.0; 100.0]]
-        let expected = [-39.0; 200.0] |> NM.Vertex
+            List.map Vertex.toVertex [(1.0, 100.0); (-40.0, 100.0)]
+        let expected = Vertex.toVertex (-39.0, 200.0)
         let actual = NM.sumSimplex simplex
         Assert.That(actual, Is.EqualTo(expected))
 
     [<Test>]
     member this.TestCentroid() =
-        let vertices =
-            List.map NM.Vertex [[1.0; 100.0]; [-40.0; 100.0]; [3.0; -20.0]]
-        let expected = [-12.0; 60.0] |> NM.Vertex
-        let actual = NM.centroid vertices
+        let simplex =
+            List.map Vertex.toVertex [(1.0, 100.0); (-40.0, 100.0); (3.0, -20.0)]
+        let expected = Vertex.toVertex (-12.0, 60.0)
+        let actual = NM.centroid simplex
         Assert.That(actual, Is.EqualTo(expected))
 
     [<Test>]
     member this.TestReflection() =
-        let xh = NM.Vertex [0.0; 3.0]
-        let xc = NM.Vertex [0.0; 1.0]
-        let expected = [0.0; - 1.0] |> NM.Vertex
+        let xh = Vertex.toVertex (0.0, 3.0)
+        let xc = Vertex.toVertex (0.0, 1.0)
+        let expected = Vertex.toVertex (0.0, - 1.0)
         let actual = NM.reflection xc xh
         Assert.That(actual, Is.EqualTo(expected))
-
+(*
     [<Test>]
     member this.TestRemove() =
         let xs = [0.0; 1.0; 8.0; 3.0]

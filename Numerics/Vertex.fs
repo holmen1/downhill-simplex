@@ -25,7 +25,8 @@ type Vertex(x: float, y: float) =
   static member (-) (a: Vertex, b) = Vertex(a.X - b, a.Y - b)
   static member (-) (a: Vertex, b: Vertex) = Vertex(a.X - b.X, a.Y - b.Y)
 
-  static member toVertex (x: float list) = Vertex(x.[0], x.[1])
+  static member toVertex (x: float, y: float) = Vertex(x, y)
+  //static member toVertex (x: float list) = Vertex(x.[0], x.[1])
   static member Zero() = Vertex (0.0, 0.0)
   member this.toTuple = x, y
   member this.toList = [x;y]
