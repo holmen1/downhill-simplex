@@ -1,5 +1,4 @@
-//namespace DownhillSimplex
-module Vertex2D
+namespace FSharp.Numerics
 (* 
     Light version of
     http://fssnip.net/X/title/Triple-3D-Vector

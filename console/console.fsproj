@@ -3,11 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <OtherFlags>--sig:Vertex.fsi</OtherFlags>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Triple.fs"/>
-    <Compile Include="Vertex2D.fs"/>
+    <Compile Include="Vertex.fs"/>
     <Compile Include="DownhillSimplex.fs"/>
     <Compile Include="Program.fs"/>
   </ItemGroup>

@@ -3,6 +3,7 @@ namespace DownhillSimplex.Tests
 open System
 open NUnit.Framework
 open DownhillSimplex
+open FSharp.Numerics
 
 
 [<TestFixture>]
@@ -10,15 +11,15 @@ type TestClass () =
 
     [<Test>]
     member this.TestBump() =
-        let v = Vertex2D.Vertex(1.0, 5.0)
-        let expected = Vertex2D.Vertex(1.0, 5.5)
+        let v = Vertex(1.0, 5.0)
+        let expected = Vertex(1.0, 5.5)
         let actual = NM.bump 1 (fun x -> 1.1 * x) v
         Assert.That(actual, Is.EqualTo(expected))
 
     [<Test>]
     member this.TestMakeSimplex() =
-        let initVertex = Vertex2D.Vertex(1.0, 100.0)
-        let expected = List.map Vertex2D.Vertex.toVertex [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
+        let initVertex = Vertex(1.0, 100.0)
+        let expected = List.map Vertex.toVertex [[1.0; 100.0]; [1.1 * 1.0; 100.0]; [1.0; 1.1 * 100.0]]
         let actual = NM.makeSimplex initVertex
         Assert.That(actual, Is.EqualTo(expected))
         //CollectionAssert.AreEquivalent(expected, actual)

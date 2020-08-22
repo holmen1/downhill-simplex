@@ -1,6 +1,5 @@
 namespace DownhillSimplex
-
-open Vertex2D
+open FSharp.Numerics
 
 // Nelder-Mead
 module NM =
@@ -10,7 +9,6 @@ module NM =
     //let bump i f v =
         Vertex.mapi i f v
         
- 
     let rec remove (i: int) (simplex: Vertex list) =
         match i, simplex with
         | 0, _::xs -> xs

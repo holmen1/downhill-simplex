@@ -1,5 +1,5 @@
 ﻿open System
-open Vertex2D
+open FSharp.Numerics
 
 [<EntryPoint>]
 let main argv =
