@@ -59,8 +59,8 @@ type TestClass () =
     member this.TestArgMax() =
         let f = NM.objFcn
         let simplex =
-            List.map Vertex.toVertex [(1.0, 1.1); (1.1, 1.0); (1.0, 1.0); (1.1, 1.1)]
-        let expected = 1, 4.420000000000007
+            List.map Vertex.toVertex [(2.0, 2.0); (1.1*2.0, 2.0); (2.0, 1.1*2.0)]
+        let expected = 1, 808.00000000000045
         let actual = NM.argMax f simplex
         Assert.That(actual, Is.EqualTo(expected))
 
@@ -72,23 +72,26 @@ type TestClass () =
         let expected = 2, 0.0
         let actual = NM.argMin f simplex
         Assert.That(actual, Is.EqualTo(expected))
-(*
-    // Objective function
+
+    // Main
     [<Test>]
-    member this.TestBanana() =
-        let min = [1.0; 1.0] |> NM.Vertex
-        let expected = 0.0
-        let actual = NM.objFcn min
-        Assert.That(actual, Is.EqualTo(expected))
+    member this.TestLoop() =
+        let objFcn = NM.objFcn
+        let simplex =
+            List.map Vertex.toVertex [(-2.0, 2.0); (0.0, 5.0); (2.0, 2.0)]
+        let expected = [(0.0, -1.0); (-2.0, 2.0); (2.0, 2.0)]
+        let actual = NM.downhillLoop objFcn simplex |> List.map Vertex.toTuple
+        CollectionAssert.AreEquivalent(expected, actual)
+        //Assert.That(actual, Is.EqualTo(expected))
 
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =
         let objFcn = NM.objFcn
-        let initVertex = [1.0; 1.0] |> NM.Vertex  
+        let initVertex = Vertex(1.0, 1.0)
         let expected = (initVertex, 0.0)
         let actual = NM.fit initVertex
-        Assert.That(actual, Is.EqualTo(expected)) *)
+        Assert.That(actual, Is.EqualTo(expected))
 
 
 

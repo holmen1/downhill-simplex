@@ -32,7 +32,6 @@ module NM =
     // arithmetic mean vertex of simplex
     let centroid (simplex: Vertex list) =
         (sumSimplex simplex) / (float simplex.Length)
-
     
     let reflection (xc: Vertex) (xh: Vertex) =
         xc + (xc - xh)
@@ -50,7 +49,6 @@ module NM =
         List.mapi (fun i v -> (i, f v)) simplex
         |> List.minBy snd
 
-    (*
     let downhillLoop objective simplex =
         let l, flow = argMin objective simplex
         let h, _ = argMax objective simplex
@@ -58,27 +56,24 @@ module NM =
         let simplex' = remove h simplex
         let xc = centroid simplex'
         let xr = reflection xc xh
-        let fr = objective xr
-        let x =
-            if fr < flow
-                then expansion xc xr
-            elif fr > flow then xr 
-            else xc
-        x::simplex'
-
-*)
+        //let fr = objective xr
+        //let x =
+        //    if fr < flow
+        //        then expansion xc xr
+        //    elif fr > flow then xr 
+        //    else xc
+        xr::simplex'
 
     // to test
     let objFcn (v: Vertex) =
         let bananaFcn ((a,b): float*float) ((x,y): float*float) =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
         bananaFcn (1.0, 100.0) v.toTuple
-(*
+
     // main
     // fit bananaFcn [3.0; 5.0]
     // val it : float list = [1.0; 1.0]
     let fit init =
         let simplex = makeSimplex init
         downhillLoop objFcn simplex
-*)
 
