@@ -9,7 +9,7 @@ module NM =
     //let bump i f v =
         Vertex.mapi i f v
         
-    let rec remove (i: int) (simplex: Vertex list) =
+    let rec remove (i: int) simplex =
         match i, simplex with
         | 0, _::xs -> xs
         | i, x::xs -> x::remove (i - 1) xs
@@ -40,19 +40,17 @@ module NM =
     let expansion (xc: Vertex) (x': Vertex) =
         x' + 2.0 * (x' - xc)
 
-    (*
     // argMax/argMin
     // returns (i, f(vertex_i))
-    let argMax f simplex =
-        simplex
-        |> List.mapi (fun i v -> (i, f v))
+    let argMax (f: Vertex -> float) (simplex: Vertex list) =
+        List.mapi (fun i v -> (i, f v)) simplex
         |> List.maxBy snd
 
     let argMin f simplex =
-        simplex
-        |> List.mapi (fun i v -> (i, f v))
+        List.mapi (fun i v -> (i, f v)) simplex
         |> List.minBy snd
 
+    (*
     let downhillLoop objective simplex =
         let l, flow = argMin objective simplex
         let h, _ = argMax objective simplex
@@ -68,19 +66,19 @@ module NM =
             else xc
         x::simplex'
 
-
+*)
 
     // to test
-    let objFcn vertex =
-        let (Vertex l) = vertex
+    let objFcn (v: Vertex) =
         let bananaFcn ((a,b): float*float) ((x,y): float*float) =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-        bananaFcn (1.0, 100.0) (l.Item(0), l.Item(1))
-
+        bananaFcn (1.0, 100.0) v.toTuple
+(*
     // main
     // fit bananaFcn [3.0; 5.0]
     // val it : float list = [1.0; 1.0]
     let fit init =
         let simplex = makeSimplex init
-        downhillLoop objFcn simplex *)
+        downhillLoop objFcn simplex
+*)
 

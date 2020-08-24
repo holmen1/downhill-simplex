@@ -47,7 +47,7 @@ type TestClass () =
         let expected = Vertex.toVertex (0.0, - 1.0)
         let actual = NM.reflection xc xh
         Assert.That(actual, Is.EqualTo(expected))
-(*
+
     [<Test>]
     member this.TestRemove() =
         let xs = [0.0; 1.0; 8.0; 3.0]
@@ -57,21 +57,22 @@ type TestClass () =
 
     [<Test>]
     member this.TestArgMax() =
-        let f = (fun (x, y) -> 4.0 - x ** 2.0 + y ** 2.0)
-        let tuples  = [(1.0, 100.0); (1.1, 100.0); (1.0, 110.0)]
-        let expected = 2, 12103.0
-        let actual = NM.argMax f tuples
+        let f = NM.objFcn
+        let simplex =
+            List.map Vertex.toVertex [(1.0, 1.1); (1.1, 1.0); (1.0, 1.0); (1.1, 1.1)]
+        let expected = 1, 4.420000000000007
+        let actual = NM.argMax f simplex
         Assert.That(actual, Is.EqualTo(expected))
 
     [<Test>]
     member this.TestArgMin() =
         let f = NM.objFcn
-        let vertices =
-            List.map NM.Vertex [[1.0; 100.0]; [1.1; 100.0]; [1.0; 1.0]; [1.0; 110.0]]
+        let simplex =
+            List.map Vertex.toVertex [(1.0, 1.1); (1.1, 1.0); (1.0, 1.0); (1.1, 1.1)]
         let expected = 2, 0.0
-        let actual = NM.argMin f vertices
+        let actual = NM.argMin f simplex
         Assert.That(actual, Is.EqualTo(expected))
-
+(*
     // Objective function
     [<Test>]
     member this.TestBanana() =
