@@ -46,6 +46,11 @@ type Vertex(x: float, y: float) =
     | :? Vertex as other -> other.X = this.X && other.Y = this.Y
     | _ -> false
 
+  override this.GetHashCode() =
+    let hash = 23.0
+    let hash = hash * 31.0 + this.X
+    int (hash * 31.0 + this.Y)
+
 module Vertex =
   let toList (v: Vertex) = [v.X; v.Y]
   let toTuple (v: Vertex) = v.X, v.Y

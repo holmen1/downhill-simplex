@@ -7,6 +7,7 @@ namespace FSharp.Numerics
     class
       new : x:float * y:float -> Vertex
       override Equals : ob:obj -> bool
+      override GetHashCode : unit -> int
       member Item : i:int -> float
       override ToString : unit -> string
       member X : float

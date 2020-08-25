@@ -36,8 +36,19 @@ module NM =
     let reflection (xc: Vertex) (xh: Vertex) =
         xc + (xc - xh)
 
-    let expansion (xc: Vertex) (x': Vertex) =
+    let expansion (x': Vertex) (xc: Vertex) =
         x' + 2.0 * (x' - xc)
+
+    let contraction (xc: Vertex) (xh: Vertex) =
+        xc - 0.5 * (xc - xh)
+
+    // mid-point
+    let mid (u: Vertex) (v: Vertex) =
+        (u + v) / 2.0
+
+    let shrink (i: int) (simplex: Vertex list) =
+        let xl = simplex.Item(i)
+        List.map (fun v -> mid xl v) simplex
 
     // argMax/argMin
     // returns (i, f(vertex_i))
@@ -50,19 +61,27 @@ module NM =
         |> List.minBy snd
 
     let downhillLoop objective simplex =
-        let l, flow = argMin objective simplex
-        let h, _ = argMax objective simplex
+        let h, fhigh = argMax objective simplex
         let xh = simplex.Item(h)
         let simplex' = remove h simplex
+        let _, fh' = argMax objective simplex'
+        let l, flow = argMin objective simplex'
         let xc = centroid simplex'
-        let xr = reflection xc xh
-        //let fr = objective xr
-        //let x =
-        //    if fr < flow
-        //        then expansion xc xr
-        //    elif fr > flow then xr 
-        //    else xc
-        xr::simplex'
+        let x' = reflection xc xh
+        let f' = objective x'
+        if f' < flow then
+            let x'' = expansion x' xc
+            let f'' = objective x''
+            if f'' < flow then x''::simplex'
+            else x'::simplex'
+        elif f' > fh' then
+            if f' <= fhigh then xh::simplex'
+            else
+                let x'' = contraction xc xh
+                let f'' = objective x''
+                if f'' > fhigh then shrink l simplex
+                else x''::simplex'
+        else x'::simplex'
 
     // to test
     let objFcn (v: Vertex) =
