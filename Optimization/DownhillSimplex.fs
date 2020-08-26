@@ -60,25 +60,32 @@ module NM =
         List.mapi (fun i v -> (i, f v)) simplex
         |> List.minBy snd
 
-    let downhillLoop objective simplex =
-        let h, fhigh = argMax objective simplex
+    let converged f simplex =
+        let vals = List.mapi (fun i v -> f v) simplex
+        let low = List.min vals
+        let high = List.max vals
+        (high - low) < 1.0E-11 // tol
+
+    let downhill (objFn: Vertex -> float) (simplex: Vertex list) =
+        //printfn "Hello simplex %A" simplex
+        let h, fhigh = argMax objFn simplex
         let xh = simplex.Item(h)
         let simplex' = remove h simplex
-        let _, fh' = argMax objective simplex'
-        let l, flow = argMin objective simplex'
+        let _, fh' = argMax objFn simplex'
+        let l, flow = argMin objFn simplex'
         let xc = centroid simplex'
         let x' = reflection xc xh
-        let f' = objective x'
+        let f' = objFn x'
         if f' < flow then
             let x'' = expansion x' xc
-            let f'' = objective x''
+            let f'' = objFn x''
             if f'' < flow then x''::simplex'
             else x'::simplex'
         elif f' > fh' then
-            if f' <= fhigh then xh::simplex'
+            if f' <= fhigh then x'::simplex'
             else
                 let x'' = contraction xc xh
-                let f'' = objective x''
+                let f'' = objFn x''
                 if f'' > fhigh then shrink l simplex
                 else x''::simplex'
         else x'::simplex'
@@ -90,9 +97,12 @@ module NM =
         bananaFcn (1.0, 100.0) v.toTuple
 
     // main
-    // fit bananaFcn [3.0; 5.0]
-    // val it : float list = [1.0; 1.0]
     let fit init =
-        let simplex = makeSimplex init
-        downhillLoop objFcn simplex
+        let maxiter = 1000
+        let mutable iter = 0
+        let mutable simplex = makeSimplex init
+        while (not (converged objFcn simplex) && iter < maxiter) do
+            simplex <- downhill objFcn simplex
+            iter <- iter + 1
+        (simplex, iter)        
 

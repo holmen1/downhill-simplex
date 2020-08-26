@@ -84,11 +84,21 @@ type TestClass () =
         CollectionAssert.AreEquivalent(expected, actual)
         //Assert.That(actual, Is.EqualTo(expected))
 
+    
+    [<Test>]
+    member this.TestConverged() =
+        let objFcn = NM.objFcn
+        let simplex =
+            List.map Vertex.toVertex [(1.1, 1.1); (1.1, 1.1); (1.1, 1.1)]
+        let expected = true
+        let actual = NM.converged objFcn simplex
+        Assert.That(actual, Is.EqualTo(expected))
+
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =
         let objFcn = NM.objFcn
-        let initVertex = Vertex(1.0, 1.0)
+        let initVertex = Vertex(3.0, 1.0)
         let expected = (initVertex, 0.0)
         let actual = NM.fit initVertex
         Assert.That(actual, Is.EqualTo(expected))
