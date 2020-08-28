@@ -1,6 +1,6 @@
 namespace DownhillSimplex
-open FSharp.Numerics
-open FSharp.Numerics.Vertex
+open Optimization.Objective
+open Optimization.Objective.Vertex
 
 // Nelder-Mead
 module NM =
@@ -32,23 +32,19 @@ module NM =
                 else (x''::simplex', false)
         else (x'::simplex', false)
 
-    // to test
-    let objFcn (v: Vertex) =
-        let bananaFcn ((a,b): float*float) ((x,y): float*float) =
-            (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-        bananaFcn (1.0, 100.0) v.toTuple
-
     // main
-    let fit (init: Vertex) =
+    let fit =
+        let init = Vertex(4.0, 4.0)
+        let objective = Objective.Fcn
         let maxiter = 1000
         let mutable iter = 0
         let mutable simplex = makeSimplex init
         let mutable converged = false
         while (not converged && iter < maxiter) do
-            let s, c = downhill objFcn simplex
+            let s, c = downhill objective simplex
             simplex <- s
             converged <- c
             iter <- iter + 1
-        let l, flow = argMin objFcn simplex
+        let l, flow = argMin objective simplex
         (simplex.Item(l).toTuple, flow, iter, converged)        
 

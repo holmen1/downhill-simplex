@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Numerics/Numerics.fsproj" />
+    <ProjectReference Include="../Optimization.Objective/Optimization.Objective.fsproj" />
   </ItemGroup>
 
 </Project>

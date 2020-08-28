@@ -2,8 +2,8 @@ namespace DownhillSimplex.Tests
 
 open NUnit.Framework
 open DownhillSimplex
-open FSharp.Numerics
-open FSharp.Numerics.Vertex
+open Optimization.Objective
+open Optimization.Objective.Vertex
 
 
 [<TestFixture>]
@@ -49,7 +49,7 @@ type TestClass () =
 
     [<Test>]
     member this.TestArgMax() =
-        let f = NM.objFcn
+        let f = Objective.Fcn
         let simplex =
             List.map Vertex.toVertex [(2.0, 2.0); (1.1*2.0, 2.0); (2.0, 1.1*2.0)]
         let expected = 1, 808.00000000000045
@@ -58,7 +58,7 @@ type TestClass () =
 
     [<Test>]
     member this.TestArgMin() =
-        let f = NM.objFcn
+        let f = Objective.Fcn
         let simplex =
             List.map Vertex.toVertex [(1.0, 1.1); (1.1, 1.0); (1.0, 1.0); (1.1, 1.1)]
         let expected = 2, 0.0
@@ -68,7 +68,6 @@ type TestClass () =
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =
-        let objFcn = NM.objFcn
         let initVertex = Vertex(3.0, 5.5)
         let expected = (1.0, 1.0)
         let actual, _, _, _= NM.fit initVertex

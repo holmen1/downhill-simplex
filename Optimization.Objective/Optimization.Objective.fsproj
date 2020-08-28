@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OtherFlags>--sig:Vertex.fsi</OtherFlags>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Vertex.fs" />
+    <Compile Include="Banana.fs" />
   </ItemGroup>
 
 </Project>
