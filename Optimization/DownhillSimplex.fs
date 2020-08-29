@@ -33,8 +33,8 @@ module NM =
         else (x'::simplex', false)
 
     // main
-    let fit =
-        let init = Vertex(4.0, 4.0)
+    let fit (guess: float * float) =
+        let init = Vertex.toVertex guess
         let objective = Objective.Fcn
         let maxiter = 1000
         let mutable iter = 0

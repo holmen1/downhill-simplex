@@ -68,7 +68,7 @@ type TestClass () =
     // Main
     [<Test>]
     member this.TestDownhillSimplex() =
-        let initVertex = Vertex(3.0, 5.5)
+        let initVertex = (3.0, 5.5)
         let expected = (1.0, 1.0)
         let actual, _, _, _= NM.fit initVertex
         Assert.That(actual, Is.EqualTo(expected))

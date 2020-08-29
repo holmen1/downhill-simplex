@@ -16,10 +16,8 @@ type Vertex(x: float, y: float) =
   static member ( * ) (a: float, v: Vertex) = Vertex(a * v.X, a * v.Y)
   static member ( / ) (v: Vertex, a: float) = Vertex(v.X / a, v.Y / a)
   static member toVertex (x: float, y: float) = Vertex(x, y)
-  static member Zero() = Vertex (0.0, 0.0)
   member this.toTuple = x, y
 
-  override this.ToString() = sprintf "[%f; %f]" x y
   override this.Equals(ob : obj) =
     match ob with
     | :? Vertex as other -> other.X = this.X && other.Y = this.Y
@@ -36,11 +34,10 @@ module Objective =
             (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
         bananaFcn (1.0, 100.0) v.toTuple
 
+
 module Vertex =
   let toTuple (v: Vertex) = v.X, v.Y
-  let norm (v: Vertex) = sqrt (v.X * v.X + v.Y * v.Y)
   let Length (v: Vertex) = 2
-  let Zero = Vertex(0.0, 0.0)
   let mapi (i: int) (f: float->float) (v: Vertex) =
     match i with
       | 0 -> Vertex(f v.X, v.Y)
@@ -60,9 +57,12 @@ module Vertex =
   let contraction (xc: Vertex) (xh: Vertex) =
       xc - 0.5 * (xc - xh)
 
-  // mid-point
-  let mid (u: Vertex) (v: Vertex) =
-      (u + v) / 2.0
+  // contract every vertex halfway to lowest vertex xl
+  let shrink (l: int) (simplex: Vertex list) =
+    let xl = simplex.Item(l)
+    let mid (u: Vertex) (v: Vertex) = (u + v) / 2.0
+    List.map (fun v -> mid xl v) simplex
+
 
 (*  Simplex *)
 
@@ -87,7 +87,7 @@ module Vertex =
       List.mapi (fun i v -> (i, f v)) simplex
       |> List.minBy snd
 
-   // arithmetic mean vertex of simplex
+  // arithmetic mean vertex of simplex
   let centroid (simplex: Vertex list) =
       let rec sumSimplex (simplex: Vertex list) =
           match simplex with
@@ -96,6 +96,3 @@ module Vertex =
               | [] -> failwith "warning FS0025"
       (sumSimplex simplex) / (float simplex.Length)
 
-  let shrink (i: int) (simplex: Vertex list) =
-    let xl = simplex.Item(i)
-    List.map (fun v -> mid xl v) simplex
