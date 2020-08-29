@@ -36,6 +36,11 @@ module Objective =
 
 
 module Vertex =
+  let alpha = 1.0       // reflection coefficient
+  let gamma = 2.0       // expansion -""-
+  let rho = 0.5         // contraction -""-
+  let bumpfactor = 1.2  // initial vertex perturbation
+
   let toTuple (v: Vertex) = v.X, v.Y
   let Length (v: Vertex) = 2
   let mapi (i: int) (f: float->float) (v: Vertex) =
@@ -49,19 +54,17 @@ module Vertex =
       mapi i f v
 
   let reflection (xc: Vertex) (xh: Vertex) =
-      xc + (xc - xh)
+      xc + alpha * (xc - xh)
 
   let expansion (x': Vertex) (xc: Vertex) =
-      x' + 2.0 * (x' - xc)
+      x' + gamma * (x' - xc)
 
   let contraction (xc: Vertex) (xh: Vertex) =
-      xc - 0.5 * (xc - xh)
+      xc - rho * (xc - xh)
 
-  // contract every vertex halfway to lowest vertex xl
   let shrink (l: int) (simplex: Vertex list) =
     let xl = simplex.Item(l)
-    let mid (u: Vertex) (v: Vertex) = (u + v) / 2.0
-    List.map (fun v -> mid xl v) simplex
+    List.map (fun v -> contraction xl v) simplex
 
 
 (*  Simplex *)
