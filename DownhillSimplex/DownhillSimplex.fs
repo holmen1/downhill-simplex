@@ -8,6 +8,7 @@ type Vertex = Vertex of float list with
     static member ( / ) (Vertex v, a: float) = List.map (fun x -> x / a) v |> Vertex
 
 // Nelder-Mead
+[<AbstractClass>]
 type DownhillSimplex(init: Vertex) =
 
     let alpha = 1.0       // reflection coefficient
@@ -92,11 +93,7 @@ type DownhillSimplex(init: Vertex) =
                 else (x''::simplex', false)
         else (x'::simplex', false)
 
-    // function to minimize
-    let cost (v: Vertex) =
-        let bananaFcn ((a,b): float*float) ((x,y): float*float) =
-            (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-        bananaFcn (1.0, 100.0) (toTuple v)
+    abstract member cost: Vertex -> float
 
     member this.fit =
         let maxiter = 500
@@ -104,19 +101,19 @@ type DownhillSimplex(init: Vertex) =
         let mutable simplex = makeSimplex init
         let mutable converged = false
         while (not converged && iter < maxiter) do
-            let s, c = downhill cost simplex
+            let s, c = downhill this.cost simplex
             simplex <- s
             converged <- c
             iter <- iter + 1
-        let l, flow = argMin cost simplex
-        (simplex.Item(l), iter, converged)  
-
-    // secondary constructor
-    new (x: float, y: float) =
-        DownhillSimplex(Vertex [x; y])
+        let l, flow = argMin this.cost simplex
+        (simplex.Item(l), flow, iter, converged)  
 
 
-
-
-
+    type MinimizeBanana(x: float, y: float) =
+        inherit DownhillSimplex(Vertex [x; y])
+        override this.cost (Vertex v) =
+            let x, y = v.Head, v.Tail.Head
+            let bananaFcn ((a,b): float*float) ((x,y): float*float) =
+                (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
+            bananaFcn (1.0, 100.0) (x, y)
 

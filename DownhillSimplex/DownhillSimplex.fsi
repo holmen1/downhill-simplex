@@ -11,10 +11,17 @@ namespace DownhillSimplex.FSharp
       static member ( * ) : a:float * Vertex -> Vertex
       static member ( - ) : Vertex * Vertex -> Vertex
     end
+  [<AbstractClassAttribute ()>]
   type DownhillSimplex =
     class
       new : init:Vertex -> DownhillSimplex
-      new : x:float * y:float -> DownhillSimplex
-      member fit : Vertex * int * bool
+      abstract member cost : Vertex -> float
+      member fit : Vertex * float * int * bool
+    end
+  type MinimizeBanana =
+    class
+      inherit DownhillSimplex
+      new : x:float * y:float -> MinimizeBanana
+      override cost : Vertex -> float
     end
 
