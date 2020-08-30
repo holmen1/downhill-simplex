@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Optimization.Objective/Optimization.Objective.fsproj" />
-    <ProjectReference Include="../Optimization/Optimization.fsproj" />
+    <ProjectReference Include="../DownhillSimplex/DownhillSimplex.fsproj" />
   </ItemGroup>
 
 </Project>

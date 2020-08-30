@@ -1,10 +1,10 @@
 ﻿open System
-open Optimization.Objective
-open DownhillSimplex
+open DownhillSimplex.FSharp
 
 [<EntryPoint>]
 let main argv =
-    let initVertex = Vertex(2.0, 3.0)
-    let actual = NM.fit //initVertex
-    printfn "Hello Vertex %A" actual
+    let DS = DownhillSimplex(2.0, 3.0)
+    let actual = DS.fit 
+    printfn "fit -> %A" actual
     0 // return an integer exit code
+// fit -> (Vertex [1.0; 1.0], 113, true)

@@ -4,8 +4,12 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <OtherFlags>--sig:DownhillSimplex.fsi</OtherFlags>
+  </PropertyGroup>  
+
   <ItemGroup>
-    <Compile Include="Banana.fs" />
+    <Compile Include="DownhillSimplex.fs" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/console/bin/Debug/net5.0/console.dll",
+            "program": "${workspaceFolder}/consoleF/bin/Debug/net5.0/consoleF.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
