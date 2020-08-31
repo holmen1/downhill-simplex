@@ -24,4 +24,10 @@ namespace DownhillSimplex.FSharp
       new : x:float * y:float -> MinimizeBanana
       override cost : Vertex -> float
     end
+  type MinimizeHimmelblau =
+    class
+      inherit DownhillSimplex
+      new : x:float * y:float -> MinimizeHimmelblau
+      override cost : Vertex -> float
+    end
 

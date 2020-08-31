@@ -15,6 +15,7 @@ type DownhillSimplex(init: Vertex) =
     let gamma = 2.0       // expansion -""-
     let rho = 0.5         // contraction -""-
     let bumpfactor = 1.2  // initial vertex perturbation
+    let tol = 1.0E-9      // convergence criterion on cost function
 
     let toTuple (Vertex v) = v.Head, v.Tail.Head
     let Length (Vertex v) = v.Length
@@ -78,7 +79,7 @@ type DownhillSimplex(init: Vertex) =
         let xc = centroid simplex'
         let x' = reflection xc xh
         let f' = objFn x' // value on reflected point
-        if (fhigh - flow) < 1.0E-20 then (simplex, true) // converged
+        if (fhigh - flow) < tol then (simplex, true) // converged
         elif f' < flow then
             let x'' = expansion x' xc
             let f'' = objFn x''
@@ -117,3 +118,9 @@ type DownhillSimplex(init: Vertex) =
                 (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
             bananaFcn (1.0, 100.0) (x, y)
 
+    type MinimizeHimmelblau(x: float, y: float) =
+        inherit DownhillSimplex(Vertex [x; y])
+        override this.cost (Vertex v) =
+            let x, y = v.Head, v.Tail.Head
+            (x ** 2.0 + y - 11.0) ** 2.0 + (x + y ** 2.0 - 7.0) ** 2.0 
+            
