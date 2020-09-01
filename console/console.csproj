@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Optimization/Optimization.fsproj" />
+    <ProjectReference Include="../DownhillSimplex/DownhillSimplex.fsproj" />
   </ItemGroup>
 
 </Project>

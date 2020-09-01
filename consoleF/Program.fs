@@ -3,7 +3,6 @@ open DownhillSimplex.FSharp
 
 [<EntryPoint>]
 let main argv =
-    //let DS = DownhillSimplex(2.0, 3.0)
     let MB = MinimizeBanana(2.0, 3.0)
     let banana = MB.fit 
     printfn "fit -> %A" banana
