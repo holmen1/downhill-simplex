@@ -11,4 +11,7 @@ bld/
 [Ll]og/
 
 .ionide/
+.vs
 
+
+.fake
