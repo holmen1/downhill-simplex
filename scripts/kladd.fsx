@@ -7,4 +7,7 @@ type Vertex(x: float list) =
 let u = Vertex[1.0; 2.0; 3.0]
 let v = Vertex[4.0; 5.0; 6.0]
 
+let y = System.Math.Log(1.0)
+
+float 2 / 3
 

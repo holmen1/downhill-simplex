@@ -9,7 +9,7 @@
             "type": "shell",
             "args": [
                 "build",
-                "${workspaceFolder}/console.Tests/console.Tests.csproj",
+                "${workspaceFolder}/console/console.csproj",
                 "/property:GenerateFullPaths=true",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary"

@@ -1,6 +1,5 @@
 ﻿namespace DownhillSimplex.FSharp
 
-
 type Vertex = Vertex of float list with
     static member (+) (Vertex u, Vertex v) = List.map2 (+) u v |> Vertex
     static member (-) (Vertex u, Vertex v) = List.map2 (-) u v |> Vertex
@@ -15,10 +14,12 @@ type DownhillSimplex(init: Vertex) =
     let gamma = 2.0       // expansion -""-
     let rho = 0.5         // contraction -""-
     let bumpfactor = 1.2  // initial vertex perturbation
-    let tol = 1.0E-9      // convergence criterion on cost function
 
-    let toTuple (Vertex v) = v.Head, v.Tail.Head
+    let toList (Vertex v) = v
     let Length (Vertex v) = v.Length
+
+    let log = System.Math.Log
+    let exp = System.Math.Exp
       
     // bumps v[index] -> f(v[index])
     let bump (index: int) (f: float->float) (Vertex v) =
@@ -67,10 +68,11 @@ type DownhillSimplex(init: Vertex) =
                 | [] -> failwith "warning FS0025"
         (sumSimplex simplex) / (float simplex.Length)
 
+
     // each step of the method consists in an update of the current simplex
     // these updates are carried out using four operations
     // reflection, expansion, contraction, and multiple shrinking
-    let downhill (objFn: Vertex -> float) (simplex: Vertex list) =
+    let downhill (objFn: Vertex -> float) (simplex: Vertex list) (tol: float) =
         let h, fhigh = argMax objFn simplex
         let xh = simplex.Item(h)
         let simplex' = remove h simplex
@@ -79,7 +81,8 @@ type DownhillSimplex(init: Vertex) =
         let xc = centroid simplex'
         let x' = reflection xc xh
         let f' = objFn x' // value on reflected point
-        if (fhigh - flow) < tol then (simplex, true) // converged
+        //if (fhigh - flow) < tol then (simplex, true) // converged
+        if flow < tol then (simplex, true) // converged
         elif f' < flow then
             let x'' = expansion x' xc
             let f'' = objFn x''
@@ -94,33 +97,27 @@ type DownhillSimplex(init: Vertex) =
                 else (x''::simplex', false)
         else (x'::simplex', false)
 
-    abstract member cost: Vertex -> float
+    abstract member objective: Vertex -> float
+    member this.obj (vs: float list) =
+        Vertex vs
+        |> this.objective
 
-    member this.fit =
-        let maxiter = 500
+    // convergence criterion on cost function
+    abstract member tol: float
+    default this.tol = 1E-6
+
+    member this.initGuess = init
+
+    member this.fit (v: Vertex) =
+        let maxiter = 5000
         let mutable iter = 0
-        let mutable simplex = makeSimplex init
+        let mutable simplex = makeSimplex v
         let mutable converged = false
         while (not converged && iter < maxiter) do
-            let s, c = downhill this.cost simplex
+            let s, c = downhill this.objective simplex this.tol
             simplex <- s
             converged <- c
             iter <- iter + 1
-        let l, flow = argMin this.cost simplex
-        (simplex.Item(l), flow, iter, converged)  
-
-
-    type MinimizeBanana(x: float, y: float) =
-        inherit DownhillSimplex(Vertex [x; y])
-        override this.cost (Vertex v) =
-            let x, y = v.Head, v.Tail.Head
-            let bananaFcn ((a,b): float*float) ((x,y): float*float) =
-                (a - x) ** 2.0 + b * (y - x ** 2.0) ** 2.0
-            bananaFcn (1.0, 100.0) (x, y)
-
-    type MinimizeHimmelblau(x: float, y: float) =
-        inherit DownhillSimplex(Vertex [x; y])
-        override this.cost (Vertex v) =
-            let x, y = v.Head, v.Tail.Head
-            (x ** 2.0 + y - 11.0) ** 2.0 + (x + y ** 2.0 - 7.0) ** 2.0 
-            
+        let l, flow = argMin this.objective simplex
+        let res = simplex.Item(l)
+        toList res

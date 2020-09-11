@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <Compile Include="DownhillSimplex.fs" />
+    <Compile Include="OptimalDiscountFactors.fs" />
+    <Compile Include="OptimalBanana.fs" />
   </ItemGroup>
 
 </Project>
