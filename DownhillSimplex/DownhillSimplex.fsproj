@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <OtherFlags>--sig:DownhillSimplex.fsi</OtherFlags>
-  </PropertyGroup>  
+    <PropertyGroup>
+        <OtherFlags>--sig:DownhillSimplex.fsi</OtherFlags>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="DownhillSimplex.fs" />
-    <Compile Include="OptimalDiscountFactors.fs" />
-    <Compile Include="OptimalBanana.fs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Include="DownhillSimplex.fs"/>
+        <Compile Include="OptimalDiscountFactors.fs"/>
+        <Compile Include="OptimalBanana.fs"/>
+    </ItemGroup>
 
 </Project>
